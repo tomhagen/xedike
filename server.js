@@ -19,13 +19,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// CÁCH 2: ENABLE CORS PHÍA SERVER 
+// CÁCH 2: ENABLE CORS PHÍA SERVER
 // Vị trí để: để phía trên api
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Method", 'GET, PUT, POST, DELETE');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, fingerprint");
+  res.header("Access-Control-Allow-Method", "GET, PUT, POST, DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, fingerprint"
+  );
   next();
 });
 
@@ -43,14 +45,15 @@ app.use("/api/users", require("./routes/api/users"));
 //router
 app.use("/api/trips", require("./routes/api/trips"));
 
+app.use("/", express.static("public"));
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// CÁCH ENABLE CORS 
+// CÁCH ENABLE CORS
 // CÁCH 1: Dùng extension - cho dev test
 // CÁCH 2: Kích hoạt bên phía server
 // Search nodejs enable cors
 // Vị trí để: để phía trên api
-// Cách 3: Dùng proxy, tạo file proxy và follow theo cài đặt 
+// Cách 3: Dùng proxy, tạo file proxy và follow theo cài đặt
