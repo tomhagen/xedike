@@ -2,12 +2,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
+require('dotenv').config()
 // my package
 
 // connect to db
 //  .connect("mongodb://localhost:27017/xedike", 
 mongoose
-  .connect("mongodb+srv://tom:123@cluster0-cpo7h.mongodb.net/test?retryWrites=true&w=majority", {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true
   })
   .then(() => console.log("Connected to database"))

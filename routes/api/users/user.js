@@ -83,7 +83,7 @@ const login = async (req, res, next) => {
           DOB: user.DOB,
           phone: user.phone
         };
-        const KEY = "Cybersoft" + fingerprint;
+        const KEY = process.env.SECRETE_KEY + fingerprint;
         jwt.sign(payload, KEY, { expiresIn: "1h" }, (err, token) => {
           if (err) return res.status(400).json(err);
 
