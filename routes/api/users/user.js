@@ -3,7 +3,7 @@ const express = require("express");
 const { User } = require("../../../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const validateRegisterInput = require("../../../validation/validateRegisterInput");
+const validateInput = require("../../../validation/validateInput");
 
 // route    POST/api/users/register
 // desc     register new user
@@ -14,7 +14,7 @@ const validateRegisterInput = require("../../../validation/validateRegisterInput
 
 // Sau khi tách file cấu hình route
 const register = async (req, res, next) => {
-  const { isValid, errors } = await validateRegisterInput(req.body);
+  const { isValid, errors } = await validateInput(req.body, "register");
   if (!isValid) return res.status(400).json(errors);
 
   const { email, password, fullName, userType, phone, DOB } = req.body;
@@ -61,8 +61,12 @@ const register = async (req, res, next) => {
 // route    POST/api/users/login
 // desc     login
 // access   PUBLIC
-const login = (req, res, next) => {
-  const { email, password } = req.body;
+const login = async (req, res, next) => {
+  const { isValid, errors } = await validateInput(req.body);
+  
+  if (!isValid) return status(400).json(errors);
+
+  const { email, password, fingerprint } = req.body;
 
   User.findOne({ email })
     .then(user => {
@@ -75,9 +79,12 @@ const login = (req, res, next) => {
           id: user.id,
           email: user.email,
           fullName: user.fullName,
-          userType: user.userType
+          userType: user.userType,
+          DOB: user.DOB,
+          phone: user.phone
         };
-        jwt.sign(payload, "Cybersoft", { expiresIn: "1h" }, (err, token) => {
+        const KEY = "Cybersoft" + fingerprint;
+        jwt.sign(payload, KEY, { expiresIn: "1h" }, (err, token) => {
           if (err) return res.status(400).json(err);
 
           return res.status(200).json({
@@ -111,11 +118,28 @@ const uploadAvatar = (req, res, next) => {
     .catch(err => res.status(400).json(err));
 };
 
+const getUserById = (req, res, next) => {
+  const { id } = req.user;
+  User.findById(id)
+    .then(user => res.status(200).json(user))
+    .catch(err => res.status(400).json(err));
+};
+
+const deleteUser = async (req, res, next) => {
+  const { id } = req.user;
+  await User.findByIdAndDelete(id, (err, res) => {
+    if (err) return res.status(400).json(err);
+    res.status(200).json({message: "delete success", res});
+  });
+};
+
 module.exports = {
   register,
   login,
   testPrivate,
-  uploadAvatar
+  uploadAvatar,
+  getUserById,
+  deleteUser
 };
 // ========== kiến thức bổ sung ============
 // // midlleware có 3 thành phần: req ( gửi dữ liệu đi kèm ) , res ( kết thúc), next ( nhảy qua middleware khác)
