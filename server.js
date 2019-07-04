@@ -5,8 +5,9 @@ const mongoose = require("mongoose");
 // my package
 
 // connect to db
+//  .connect("mongodb://localhost:27017/xedike", 
 mongoose
-  .connect("mongodb://localhost:27017/xedike", {
+  .connect("mongodb+srv://tom:123@cluster0-cpo7h.mongodb.net/test?retryWrites=true&w=majority", {
     useNewUrlParser: true
   })
   .then(() => console.log("Connected to database"))
