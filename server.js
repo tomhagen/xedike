@@ -6,9 +6,19 @@ require('dotenv').config()
 // my package
 
 // connect to db
+
+// set STAGE $env:STAGE="development", node, process.env.STAGE để kiểm tra
+
+let mongouri = "";
+if(process.env.STAGE === "development"){
+  mongouri = process.env.MONGO_URI_DEV
+}
+else if(process.env.STAGE === "production"){
+  mongouri = process.env.MONGO_URI_PROD
+}
 //  .connect("mongodb://localhost:27017/xedike", 
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect(mongouri, {
     useNewUrlParser: true
   })
   .then(() => console.log("Connected to database"))
