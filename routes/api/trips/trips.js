@@ -44,6 +44,8 @@ const createTrip = (req, res, next) => {
 
 // Viết theo kiểu Promise all để dự phòng TH server không hỗ trợ phiên bản cao hơn asysnc await
 
+// update from local admin window 1/4/2020
+
 const bookTrip = (req, res, next) => {
   const { tripId } = req.params;
   const { numberOfBookingSeats } = req.body;
