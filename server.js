@@ -69,3 +69,5 @@ app.listen(port, () => {
 // Search nodejs enable cors
 // Vị trí để: để phía trên api
 // Cách 3: Dùng proxy, tạo file proxy và follow theo cài đặt
+
+// Macbook update 1/4/2020
